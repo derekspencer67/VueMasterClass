@@ -1,5 +1,6 @@
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
+import { makeFetchItemAction, makeFetchItemsAction } from '@/helpers'
 export default {
   namespaced: true,
   state: {
@@ -42,8 +43,8 @@ export default {
       const updatedPost = await postRef.get()
       commit('setItem', { resource: 'posts', item: updatedPost }, { root: true })
     },
-    fetchPost: ({ dispatch }, { id }) => dispatch('fetchItem', { emoji: '💬', resource: 'posts', id }, { root: true }),
-    fetchPosts: ({ dispatch }, { ids }) => dispatch('fetchItems', { resource: 'posts', ids, emoji: '💬' }, { root: true })
+    fetchPost: makeFetchItemAction({ emoji: '💬', resource: 'posts' }),
+    fetchPosts: makeFetchItemsAction({ emoji: '💬', resource: 'posts' })
   },
   mutations: {}
 }
