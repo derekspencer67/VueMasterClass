@@ -1,7 +1,6 @@
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
 import 'firebase/compat/auth'
-import { findById, docToResource } from '@/helpers'
 export default {
 
   fetchItem ({ state, commit }, { id, emoji, resource, handleUnsubscribe = null }) {
