@@ -1,4 +1,4 @@
-import firebase from 'firebase/compat/app'
+import firebase from '@/helpers/firebase'
 import 'firebase/compat/firestore'
 import 'firebase/compat/storage'
 import useNotifications from '@/composables/useNotifications'
@@ -15,11 +15,17 @@ export default {
     }
   },
   actions: {
+    async updateEmail ({ state }, { email }) {
+      return firebase.auth().currentUser.updateEmail(email)
+    },
+    async reauthenticate ({ state }, { email, password }) {
+      const credential = firebase.auth.EmailAuthProvider.credential(email, password)
+      await firebase.auth().currentUser.reauthenticateWithCredential(credential)
+    },
     initAuthentication ({ dispatch, commit, state }) {
       if (state.authObserverUnsubscribe) state.authObserverUnsubscribe()
       return new Promise((resolve) => {
         const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
-          console.log('👣 the user has changed')
           this.dispatch('auth/unsubscribeAuthUserSnapshot')
           if (user) {
             await this.dispatch('auth/fetchAuthUser')

@@ -1,11 +1,10 @@
-import firebase from 'firebase/compat/app'
+import firebase from '@/helpers/firebase'
 import 'firebase/compat/firestore'
 import 'firebase/compat/auth'
 import { findById } from '@/helpers'
 export default {
 
-  fetchItem ({ state, commit }, { id, emoji, resource, handleUnsubscribe = null, once = false, onSnapshot = null }) {
-    console.log('🔥', emoji, id)
+  fetchItem ({ state, commit }, { id, resource, handleUnsubscribe = null, once = false, onSnapshot = null }) {
     return new Promise((resolve) => {
       const unsubscribe = firebase.firestore().collection(resource).doc(id).onSnapshot((doc) => {
         if (once) unsubscribe()
@@ -31,10 +30,14 @@ export default {
     })
   },
   fetchItems ({ dispatch }, { ids, resource, emoji, onSnapshot = null }) {
+    ids = ids || []
     return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource, emoji, onSnapshot })))
   },
   async unsubscribeAllSnapshots ({ state, commit }) {
     state.unsubscribes.forEach(unsubscribe => unsubscribe())
     commit('clearAllUnsubscribes')
+  },
+  clearItems ({ commit }, { modules = [] }) {
+    commit('clearItems', { modules })
   }
 }

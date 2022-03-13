@@ -1,4 +1,4 @@
-import firebase from 'firebase/compat/app'
+import firebase from '@/helpers/firebase'
 import 'firebase/compat/firestore'
 import { makeFetchItemAction, makeFetchItemsAction } from '@/helpers'
 export default {
@@ -11,7 +11,6 @@ export default {
     fetchCategory: makeFetchItemAction({ emoji: '🏷', resource: 'categories' }),
     fetchCategories: makeFetchItemsAction({ emoji: '🏷', resource: 'categories' }),
     fetchAllCategories ({ commit }) {
-      console.log('🔥', '🏷', 'all')
       return new Promise((resolve) => {
         firebase.firestore().collection('categories').onSnapshot((querySnapshot) => {
           const categories = querySnapshot.docs.map(doc => {
